@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python Cheatsheet — To'liq Qo'llanma</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e17;
+    --surface: #111827;
+    --surface2: #1a2332;
+    --border: #1e3a5f;
+    --py-blue: #3b82f6;
+    --py-yellow: #fbbf24;
+    --py-green: #10b981;
+    --py-red: #f87171;
+    --py-purple: #a78bfa;
+    --py-cyan: #22d3ee;
+    --py-orange: #fb923c;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --code-bg: #0d1117;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0a0e17 0%, #0f1f3d 50%, #0a0e17 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 60px 40px 50px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(59,130,246,0.15) 0%, transparent 70%);
+  }
+  .hero-snake {
+    font-size: 64px;
+    margin-bottom: 12px;
+    display: block;
+    animation: float 3s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  .hero h1 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 42px;
+    font-weight: 700;
+    background: linear-gradient(90deg, var(--py-blue), var(--py-cyan), var(--py-yellow));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+  }
+  .hero p {
+    color: var(--muted);
+    font-size: 16px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* NAV */
+  .toc {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 40px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .toc a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+  }
+  .toc a:hover {
+    color: var(--py-blue);
+    border-color: var(--py-blue);
+    background: rgba(59,130,246,0.1);
+  }
+
+  /* MAIN */
+  .container { max-width: 1100px; margin: 0 auto; padding: 40px 24px; }
+
+  .section {
+    margin-bottom: 60px;
+    scroll-margin-top: 80px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 28px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-icon {
+    font-size: 28px;
+  }
+  .section-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .section-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 12px;
+    background: rgba(59,130,246,0.15);
+    color: var(--py-blue);
+    border: 1px solid rgba(59,130,246,0.3);
+    margin-left: auto;
+  }
+
+  /* GRID */
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 20px; }
+  .grid-3 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+
+  /* CARD */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .card:hover {
+    border-color: var(--py-blue);
+    transform: translateY(-2px);
+  }
+  .card-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .card-header .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+  }
+  .dot-red { background: #f87171; }
+  .dot-yellow { background: #fbbf24; }
+  .dot-green { background: #10b981; }
+
+  /* CODE */
+  pre {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    padding: 16px;
+    background: var(--code-bg);
+    overflow-x: auto;
+    color: var(--text);
+  }
+  .kw { color: var(--py-purple); font-weight: 600; }
+  .fn { color: var(--py-blue); }
+  .cls { color: var(--py-cyan); }
+  .str { color: var(--py-green); }
+  .num { color: var(--py-orange); }
+  .cm { color: var(--muted); font-style: italic; }
+  .op { color: var(--py-yellow); }
+  .dec { color: var(--py-red); }
+
+  /* INFO BOX */
+  .info-box {
+    background: var(--surface2);
+    border-left: 3px solid var(--py-blue);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 16px 0;
+    font-size: 14px;
+  }
+  .info-box.green { border-left-color: var(--py-green); }
+  .info-box.yellow { border-left-color: var(--py-yellow); }
+  .info-box.red { border-left-color: var(--py-red); }
+  .info-box strong { color: var(--py-cyan); }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  th {
+    background: var(--surface2);
+    color: var(--py-cyan);
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  td {
+    padding: 10px 14px;
+    border-top: 1px solid var(--border);
+    vertical-align: top;
+  }
+  td:first-child { color: var(--py-yellow); }
+  td:last-child { color: var(--muted); font-size: 13px; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* ENV DIAGRAM */
+  .env-diagram {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 2;
+  }
+  .env-folder { color: var(--py-yellow); }
+  .env-file { color: var(--py-green); }
+  .env-arrow { color: var(--muted); }
+  .env-desc { color: var(--muted); font-size: 12px; }
+
+  /* CLASS DIAGRAM */
+  .class-diagram {
+    background: var(--code-bg);
+    border: 1px solid var(--py-cyan);
+    border-radius: 12px;
+    overflow: hidden;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .class-name-bar {
+    background: rgba(34,211,238,0.15);
+    border-bottom: 1px solid var(--py-cyan);
+    padding: 10px 20px;
+    color: var(--py-cyan);
+    font-weight: 700;
+    font-size: 15px;
+    text-align: center;
+  }
+  .class-section {
+    padding: 12px 20px;
+    border-bottom: 1px dashed var(--border);
+  }
+  .class-section:last-child { border-bottom: none; }
+  .class-label {
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .attr { color: var(--py-orange); margin: 3px 0; }
+  .method { color: var(--py-blue); margin: 3px 0; }
+
+  /* BADGE INLINE */
+  .badge {
+    display: inline-block;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    vertical-align: middle;
+    margin-left: 6px;
+  }
+  .badge-blue { background: rgba(59,130,246,0.2); color: var(--py-blue); }
+  .badge-green { background: rgba(16,185,129,0.2); color: var(--py-green); }
+  .badge-yellow { background: rgba(251,191,36,0.2); color: var(--py-yellow); }
+
+  /* STEP */
+  .steps { display: flex; flex-direction: column; gap: 12px; }
+  .step {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 18px;
+  }
+  .step-num {
+    background: var(--py-blue);
+    color: white;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .step-content { flex: 1; }
+  .step-title { font-weight: 600; margin-bottom: 6px; }
+
+  /* FOOTER */
+  .footer {
+    text-align: center;
+    padding: 40px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+  }
+  .footer span { color: var(--py-yellow); }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-snake">🐍</span>
+  <h1>Python Cheatsheet</h1>
+  <p>// basics · classes · environments · umumiy ko'rinish</p>
+</div>
+
+<!-- NAV -->
+<nav class="toc">
+  <a href="#basics">Asoslar</a>
+  <a href="#types">Turlar</a>
+  <a href="#control">Boshqaruv</a>
+  <a href="#functions">Funksiyalar</a>
+  <a href="#classes">Klasslar (OOP)</a>
+  <a href="#modules">Modullar</a>
+  <a href="#errors">Xatoliklar</a>
+  <a href="#env">Virtual Muhit</a>
+  <a href="#conda">Conda</a>
+  <a href="#image">Umumiy Rasm</a>
+</nav>
+
+<div class="container">
+
+  <!-- 1. ASOSLAR -->
+  <section class="section" id="basics">
+    <div class="section-header">
+      <span class="section-icon">⚡</span>
+      <span class="section-title">Python Asoslari</span>
+      <span class="section-badge">01 / BASICS</span>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <div class="card-header">
+          <span class="dot dot-red"></span>
+          <span class="dot dot-yellow"></span>
+          <span class="dot dot-green"></span>
+          o'zgaruvchilar.py
+        </div>
+        <pre><span class="cm"># Python da type yozilmaydi — avtomatik</span>
+ism = <span class="str">"Jasur"</span>          <span class="cm"># str</span>
+yosh = <span class="num">20</span>             <span class="cm"># int</span>
+ball = <span class="num">9.5</span>            <span class="cm"># float</span>
+faol = <span class="kw">True</span>           <span class="cm"># bool</span>
+hech = <span class="kw">None</span>           <span class="cm"># NoneType</span>
+
+<span class="cm"># Ko'p o'zgaruvchi</span>
+x, y, z = <span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>
+
+<span class="cm"># Type tekshirish</span>
+<span class="fn">type</span>(ism)            <span class="cm"># &lt;class 'str'&gt;</span>
+<span class="fn">isinstance</span>(yosh, <span class="cls">int</span>) <span class="cm"># True</span>
+
+<span class="cm"># F-string (eng qulay usul)</span>
+<span class="fn">print</span>(<span class="str">f"Salom, {ism}! Yoshingiz: {yosh}"</span>)</pre>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="dot dot-red"></span>
+          <span class="dot dot-yellow"></span>
+          <span class="dot dot-green"></span>
+          operatsiyalar.py
+        </div>
+        <pre><span class="cm"># Arifmetik</span>
+<span class="num">10</span> <span class="op">+</span> <span class="num">3</span>   <span class="cm"># 13</span>
+<span class="num">10</span> <span class="op">-</span> <span class="num">3</span>   <span class="cm"># 7</span>
+<span class="num">10</span> <span class="op">*</span> <span class="num">3</span>   <span class="cm"># 30</span>
+<span class="num">10</span> <span class="op">/</span> <span class="num">3</span>   <span class="cm"># 3.33... (float)</span>
+<span class="num">10</span> <span class="op">//</span> <span class="num">3</span>  <span class="cm"># 3     (butun bo'lish)</span>
+<span class="num">10</span> <span class="op">%</span> <span class="num">3</span>   <span class="cm"># 1     (qoldiq)</span>
+<span class="num">2</span> <span class="op">**</span> <span class="num">8</span>   <span class="cm"># 256   (daraja)</span>
+
+<span class="cm"># Taqqoslash</span>
+<span class="num">5</span> <span class="op">==</span> <span class="num">5</span>   <span class="cm"># True</span>
+<span class="num">5</span> <span class="op">!=</span> <span class="num">3</span>   <span class="cm"># True</span>
+<span class="num">5</span> <span class="op">&gt;</span> <span class="num">3</span>    <span class="cm"># True</span>
+
+<span class="cm"># Mantiqiy</span>
+<span class="kw">True and False</span>  <span class="cm"># False</span>
+<span class="kw">True or False</span>   <span class="cm"># True</span>
+<span class="kw">not True</span>        <span class="cm"># False</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. MA'LUMOT TURLARI -->
+  <section class="section" id="types">
+    <div class="section-header">
+      <span class="section-icon">📦</span>
+      <span class="section-title">Ma'lumot Turlari</span>
+      <span class="section-badge">02 / TYPES</span>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <div class="card-header">
+          <span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span>
+          list — ro'yxat <span class="badge badge-blue">o'zgaruvchan</span>
+        </div>
+        <pre>mevalar = [<span class="str">"olma"</span>, <span class="str">"nok"</span>, <span class="str">"uzum"</span>]
+
+mevalar[<span class="num">0</span>]         <span class="cm"># "olma"</span>
+mevalar[<span class="op">-</span><span class="num">1</span>]        <span class="cm"># "uzum" (oxirgi)</span>
+mevalar[<span class="num">0</span>:<span class="num">2</span>]       <span class="cm"># ["olma", "nok"]</span>
+
+mevalar.append(<span class="str">"banan"</span>)  <span class="cm"># qo'shish</span>
+mevalar.remove(<span class="str">"nok"</span>)   <span class="cm"># o'chirish</span>
+mevalar.sort()           <span class="cm"># saralash</span>
+<span class="fn">len</span>(mevalar)             <span class="cm"># uzunlik</span>
+<span class="str">"olma"</span> <span class="kw">in</span> mevalar       <span class="cm"># True</span></pre>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span>
+          dict — lug'at <span class="badge badge-green">kalit:qiymat</span>
+        </div>
+        <pre>odam = {
+    <span class="str">"ism"</span>: <span class="str">"Jasur"</span>,
+    <span class="str">"yosh"</span>: <span class="num">20</span>,
+    <span class="str">"shahar"</span>: <span class="str">"Toshkent"</span>
+}
+
+odam[<span class="str">"ism"</span>]              <span class="cm"># "Jasur"</span>
+odam.get(<span class="str">"yosh"</span>, <span class="num">0</span>)      <span class="cm"># 20 (xato bermaydi)</span>
+odam[<span class="str">"email"</span>] = <span class="str">"@uz"</span>   <span class="cm"># qo'shish</span>
+<span class="kw">del</span> odam[<span class="str">"shahar"</span>]       <span class="cm"># o'chirish</span>
+odam.keys()              <span class="cm"># barcha kalitlar</span>
+odam.values()            <span class="cm"># barcha qiymatlar</span>
+odam.items()             <span class="cm"># juftliklar</span></pre>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span>
+          tuple — o'zgarmas list <span class="badge badge-yellow">immutable</span>
+        </div>
+        <pre>koordinat = (<span class="num">41.2</span>, <span class="num">69.3</span>)  <span class="cm"># Toshkent</span>
+
+koordinat[<span class="num">0</span>]   <span class="cm"># 41.2</span>
+koordinat[<span class="num">1</span>]   <span class="cm"># 69.3</span>
+
+<span class="cm"># O'zgartirib bo'lmaydi!</span>
+<span class="cm"># koordinat[0] = 0  ← ERROR</span>
+
+<span class="cm"># Unpack qilish</span>
+lat, lon = koordinat
+<span class="fn">print</span>(lat, lon)</pre>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span>
+          set — noyob to'plam
+        </div>
+        <pre>a = {<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">2</span>, <span class="num">1</span>}  <span class="cm"># {1, 2, 3}</span>
+b = {<span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>}
+
+a <span class="op">|</span> b   <span class="cm"># birlashma: {1,2,3,4}</span>
+a <span class="op">&</span> b   <span class="cm"># kesishuv: {2,3}</span>
+a <span class="op">-</span> b   <span class="cm"># farq:     {1}</span>
+
+a.add(<span class="num">5</span>)
+a.discard(<span class="num">1</span>)
+
+<span class="cm"># Takrorlarni yo'q qilish uchun:</span>
+ro'yxat = [<span class="num">1</span>,<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>,<span class="num">2</span>]
+noyob = <span class="fn">list</span>(<span class="fn">set</span>(ro'yxat))</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. BOSHQARUV -->
+  <section class="section" id="control">
+    <div class="section-header">
+      <span class="section-icon">🔀</span>
+      <span class="section-title">Boshqaruv Tuzilmalari</span>
+      <span class="section-badge">03 / CONTROL</span>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <div class="card-header">
+          <span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span>
+          if / elif / else
+        </div>
+        <pre>ball = <span class="num">85</span>
+
+<span class="kw">if</span> ball <span class="op">>=</span> <span class="num">90</span>:
+    <span class="fn">print</span>(<span class="str">"A'lo"</span>)
+<span class="kw">elif</span> ball <span class="op">>=</span> <span class="num">70</span>:
+    <span class="fn">print</span>(<span class="str">"Yaxshi"</span>)
+<span class="kw">elif</span> ball <span class="op">>=</span> <span class="num">55</span>:
+    <span class="fn">print</span>(<span class="str">"Qoniqarli"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"Qoniqarsiz"</span>)
+
+<span class="cm"># Bir qatorli (ternary)</span>
+holat = <span class="str">"o'tdi"</span> <span class="kw">if</span> ball <span class="op">>=</span> <span class="num">55</span> <span class="kw">else</span> <span class="str">"o'tmadi"</span></pre>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span>
+          for / while tsikl
+        </div>
+        <pre><span class="cm"># for tsikl</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):      <span class="cm"># 0,1,2,3,4</span>
+    <span class="fn">print</span>(i)
+
+<span class="kw">for</span> meva <span class="kw">in</span> [<span class="str">"olma"</span>,<span class="str">"nok"</span>]:
+    <span class="fn">print</span>(meva)
+
+<span class="cm"># Enumerate — index bilan</span>
+<span class="kw">for</span> i, val <span class="kw">in</span> <span class="fn">enumerate</span>(mevalar):
+    <span class="fn">print</span>(i, val)
+
+<span class="cm"># while tsikl</span>
+n = <span class="num">0</span>
+<span class="kw">while</span> n <span class="op">&lt;</span> <span class="num">5</span>:
+    <span class="fn">print</span>(n)
+    n <span class="op">+=</span> <span class="num">1</span>
+
+<span class="cm"># break / continue</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">10</span>):
+    <span class="kw">if</span> i <span class="op">==</span> <span class="num">3</span>: <span class="kw">continue</span>  <span class="cm"># o'tkazib yuborish</span>
+    <span class="kw">if</span> i <span class="op">==</span> <span class="num">7</span>: <span class="kw">break</span>    <span class="cm"># to'xtatish</span></pre>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span>
+          List Comprehension ✨
+        </div>
+        <pre><span class="cm"># Oddiy usul:</span>
+kvadratlar = []
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">10</span>):
+    kvadratlar.append(i<span class="op">**</span><span class="num">2</span>)
+
+<span class="cm"># Python usuli (1 qator):</span>
+kvadratlar = [i<span class="op">**</span><span class="num">2</span> <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">10</span>)]
+
+<span class="cm"># Shartli:</span>
+juft = [i <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">20</span>) <span class="kw">if</span> i<span class="op">%</span><span class="num">2</span><span class="op">==</span><span class="num">0</span>]
+
+<span class="cm"># Dict comprehension:</span>
+balllar = {<span class="str">"Ali"</span>:<span class="num">80</span>, <span class="str">"Vali"</span>:<span class="num">90</span>}
+foiz = {k: v/<span class="num">100</span> <span class="kw">for</span> k,v <span class="kw">in</span> balllar.items()}</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. FUNKSIYALAR -->
+  <section class="section" id="functions">
+    <div class="section-header">
+      <span class="section-icon">🔧</span>
+      <span class="section-title">Funksiyalar</span>
+      <span class="section-badge">04 / FUNCTIONS</span>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <div class="card-header">
+          <span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span>
+          def — asosiy tuzilma
+        </div>
+        <pre><span class="kw">def</span> <span class="fn">salomlash</span>(ism, shahar=<span class="str">"Toshkent"</span>):
+    <span class="str">"""Bu funksiya salomlaydi."""</span>  <span class="cm"># docstring</span>
+    <span class="kw">return</span> <span class="str">f"Salom {ism}, {shahar}dan!"</span>
+
+<span class="fn">salomlash</span>(<span class="str">"Jasur"</span>)
+<span class="fn">salomlash</span>(<span class="str">"Ali"</span>, shahar=<span class="str">"Samarqand"</span>)
+
+<span class="cm"># Ko'p qiymat qaytarish</span>
+<span class="kw">def</span> <span class="fn">min_max</span>(lst):
+    <span class="kw">return</span> <span class="fn">min</span>(lst), <span class="fn">max</span>(lst)
+
+kichik, katta = <span class="fn">min_max</span>([<span class="num">3</span>,<span class="num">1</span>,<span class="num">7</span>,<span class="num">2</span>])</pre>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span>
+          *args, **kwargs
+        </div>
+        <pre><span class="cm"># *args — ixtiyoriy sonli argumentlar</span>
+<span class="kw">def</span> <span class="fn">yig'indi</span>(*sonlar):
+    <span class="kw">return</span> <span class="fn">sum</span>(sonlar)
+
+<span class="fn">yig'indi</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>)   <span class="cm"># 10</span>
+
+<span class="cm"># **kwargs — ixtiyoriy kalit-qiymatlar</span>
+<span class="kw">def</span> <span class="fn">profil</span>(**ma'lumot):
+    <span class="kw">for</span> k, v <span class="kw">in</span> ma'lumot.items():
+        <span class="fn">print</span>(<span class="str">f"{k}: {v}"</span>)
+
+<span class="fn">profil</span>(ism=<span class="str">"Jasur"</span>, yosh=<span class="num">20</span>)</pre>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span>
+          lambda + map/filter
+        </div>
+        <pre><span class="cm"># Lambda — nomi yo'q funksiya</span>
+ikkilat = <span class="kw">lambda</span> x: x <span class="op">*</span> <span class="num">2</span>
+<span class="fn">ikkilat</span>(<span class="num">5</span>)  <span class="cm"># 10</span>
+
+<span class="cm"># map — har elementga funksiya qo'llash</span>
+sonlar = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>]
+<span class="fn">list</span>(<span class="fn">map</span>(<span class="kw">lambda</span> x: x<span class="op">**</span><span class="num">2</span>, sonlar))
+<span class="cm"># [1, 4, 9, 16]</span>
+
+<span class="cm"># filter — shartga moslarni olish</span>
+<span class="fn">list</span>(<span class="fn">filter</span>(<span class="kw">lambda</span> x: x<span class="op">%</span><span class="num">2</span><span class="op">==</span><span class="num">0</span>, sonlar))
+<span class="cm"># [2, 4]</span>
+
+<span class="cm"># sorted bilan</span>
+talabalar.sort(key=<span class="kw">lambda</span> t: t[<span class="str">"ball"</span>])</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. KLASSLAR -->
+  <section class="section" id="classes">
+    <div class="section-header">
+      <span class="section-icon">🏗️</span>
+      <span class="section-title">Klasslar (OOP)</span>
+      <span class="section-badge">05 / CLASSES</span>
+    </div>
+
+    <div class="info-box">
+      <strong>Klass nima?</strong> — Klass bu "qolip" (blueprint). Undan <em>object</em> (namuna) yaratiladi. Masalan: <code>Odam</code> klass, <code>jasur</code> object.
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+      <div class="class-diagram">
+        <div class="class-name-bar">📐 Klass tuzilmasi</div>
+        <div class="class-section">
+          <div class="class-label">⚡ ATRIBUTLAR</div>
+          <div class="attr">+ self.ism : str</div>
+          <div class="attr">+ self.yosh : int</div>
+          <div class="attr">+ self.ball : float</div>
+        </div>
+        <div class="class-section">
+          <div class="class-label">🔧 METODLAR</div>
+          <div class="method">+ __init__(self, ...)</div>
+          <div class="method">+ __str__(self)</div>
+          <div class="method">+ salomlash(self)</div>
+          <div class="method">+ ball_qo'sh(self, n)</div>
+        </div>
+        <div class="class-section">
+          <div class="class-label">🔒 MAXFIY</div>
+          <div class="attr" style="color: var(--py-red)">- _ichki : str</div>
+          <div class="attr" style="color: var(--py-red)">- __maxfiy : str</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span>
+          asosiy klass
+        </div>
+        <pre><span class="kw">class</span> <span class="cls">Talaba</span>:
+    <span class="cm"># Klass atributi (hammada bir xil)</span>
+    universitet = <span class="str">"TSUE"</span>
+
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, ism, yosh):
+        <span class="cm"># Object atributlari</span>
+        self.ism = ism
+        self.yosh = yosh
+        self.balllar = []
+
+    <span class="kw">def</span> <span class="fn">__str__</span>(self):
+        <span class="cm"># print() qilganda chiqadi</span>
+        <span class="kw">return</span> <span class="str">f"Talaba: {self.ism}"</span>
+
+    <span class="kw">def</span> <span class="fn">ball_qo'sh</span>(self, ball):
+        self.balllar.append(ball)
+
+    <span class="kw">def</span> <span class="fn">o'rtacha</span>(self):
+        <span class="kw">return</span> <span class="fn">sum</span>(self.balllar) / <span class="fn">len</span>(self.balllar)
+
+<span class="cm"># Object yaratish</span>
+jasur = <span class="cls">Talaba</span>(<span class="str">"Jasur"</span>, <span class="num">20</span>)
+jasur.ball_qo'sh(<span class="num">85</span>)
+jasur.ball_qo'sh(<span class="num">90</span>)
+<span class="fn">print</span>(jasur.o'rtacha())  <span class="cm"># 87.5</span></pre>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="card-header">
+          <span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span>
+          Meros (Inheritance)
+        </div>
+        <pre><span class="kw">class</span> <span class="cls">Shaxs</span>:          <span class="cm"># Ota klass</span>
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, ism):
+        self.ism = ism
+
+    <span class="kw">def</span> <span class="fn">salomlash</span>(self):
+        <span class="kw">return</span> <span class="str">f"Salom, men {self.ism}"</span>
+
+
+<span class="kw">class</span> <span class="cls">O'qituvchi</span>(<span class="cls">Shaxs</span>):  <span class="cm"># Bola klass</span>
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, ism, fan):
+        <span class="fn">super()</span>.<span class="fn">__init__</span>(ism)  <span class="cm"># Otani chaqirish</span>
+        self.fan = fan
+
+    <span class="kw">def</span> <span class="fn">salomlash</span>(self):       <span class="cm"># Override</span>
+        <span class="kw">return</span> <span class="str">f"Men {self.fan} o'qitaman"</span>
+
+ustoz = <span class="cls">O'qituvchi</span>(<span class="str">"Akbar"</span>, <span class="str">"Python"</span>)
+<span class="fn">isinstance</span>(ustoz, <span class="cls">Shaxs</span>)  <span class="cm"># True!</span></pre>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span>
+          @property, @staticmethod, @classmethod
+        </div>
+        <pre><span class="kw">class</span> <span class="cls">Doira</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, radius):
+        self._radius = radius
+
+    <span class="dec">@property</span>
+    <span class="kw">def</span> <span class="fn">radius</span>(self):        <span class="cm"># getter</span>
+        <span class="kw">return</span> self._radius
+
+    <span class="dec">@radius.setter</span>
+    <span class="kw">def</span> <span class="fn">radius</span>(self, r):      <span class="cm"># setter</span>
+        <span class="kw">if</span> r <span class="op">&lt;</span> <span class="num">0</span>: <span class="kw">raise</span> <span class="cls">ValueError</span>()
+        self._radius = r
+
+    <span class="dec">@staticmethod</span>
+    <span class="kw">def</span> <span class="fn">pi</span>():                 <span class="cm"># self siz</span>
+        <span class="kw">return</span> <span class="num">3.14159</span>
+
+    <span class="dec">@classmethod</span>
+    <span class="kw">def</span> <span class="fn">birlik</span>(cls):           <span class="cm"># klassdan</span>
+        <span class="kw">return</span> cls(<span class="num">1</span>)</pre>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span>
+          Maxfiylik + Dunder metodlar
+        </div>
+        <pre><span class="kw">class</span> <span class="cls">Hisob</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, balans):
+        self.__balans = balans   <span class="cm"># MAXFIY</span>
+
+    <span class="kw">def</span> <span class="fn">__repr__</span>(self):          <span class="cm"># debug uchun</span>
+        <span class="kw">return</span> <span class="str">f"Hisob({self.__balans})"</span>
+
+    <span class="kw">def</span> <span class="fn">__len__</span>(self):           <span class="cm"># len() uchun</span>
+        <span class="kw">return</span> self.__balans
+
+    <span class="kw">def</span> <span class="fn">__add__</span>(self, other):    <span class="cm"># + operator</span>
+        <span class="kw">return</span> <span class="cls">Hisob</span>(self.__balans + other.__balans)
+
+<span class="cm"># __dunder__ = "magic method"</span>
+<span class="cm"># __init__ __str__ __repr__ __len__</span>
+<span class="cm"># __add__ __eq__ __lt__ __iter__</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. MODULLAR -->
+  <section class="section" id="modules">
+    <div class="section-header">
+      <span class="section-icon">📚</span>
+      <span class="section-title">Modullar va Import</span>
+      <span class="section-badge">06 / MODULES</span>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <div class="card-header">
+          <span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span>
+          import usullari
+        </div>
+        <pre><span class="kw">import</span> math
+math.sqrt(<span class="num">16</span>)    <span class="cm"># 4.0</span>
+math.pi           <span class="cm"># 3.14159...</span>
+
+<span class="kw">from</span> math <span class="kw">import</span> sqrt, pi
+sqrt(<span class="num">25</span>)          <span class="cm"># 5.0</span>
+
+<span class="kw">import</span> numpy <span class="kw">as</span> np    <span class="cm"># alias</span>
+<span class="kw">import</span> pandas <span class="kw">as</span> pd
+
+<span class="cm"># O'z modulingiz:</span>
+<span class="cm"># fayl: utils.py</span>
+<span class="kw">def</span> <span class="fn">salom</span>(): <span class="kw">return</span> <span class="str">"hi"</span>
+
+<span class="cm"># boshqa joyda:</span>
+<span class="kw">from</span> utils <span class="kw">import</span> salom</pre>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span>
+          Muhim standart kutubxonalar
+        </div>
+        <pre><span class="kw">import</span> os          <span class="cm"># Fayl tizimi</span>
+<span class="kw">import</span> sys         <span class="cm"># Python tizimi</span>
+<span class="kw">import</span> json        <span class="cm"># JSON ishlash</span>
+<span class="kw">import</span> datetime    <span class="cm"># Sana/vaqt</span>
+<span class="kw">import</span> random      <span class="cm"># Tasodifiy sonlar</span>
+<span class="kw">import</span> re          <span class="cm"># Regex</span>
+<span class="kw">import</span> time        <span class="cm"># Kutish: time.sleep()</span>
+<span class="kw">import</span> pathlib     <span class="cm"># Zamonaviy fayl yo'l</span>
+<span class="kw">import</span> collections <span class="cm"># Counter, defaultdict</span>
+<span class="kw">import</span> itertools   <span class="cm"># combinations, chain</span>
+<span class="kw">import</span> functools   <span class="cm"># reduce, lru_cache</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. XATOLIKLAR -->
+  <section class="section" id="errors">
+    <div class="section-header">
+      <span class="section-icon">🚨</span>
+      <span class="section-title">Xatoliklarni Boshqarish</span>
+      <span class="section-badge">07 / EXCEPTIONS</span>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <div class="card-header">
+          <span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span>
+          try / except / finally
+        </div>
+        <pre><span class="kw">try</span>:
+    son = <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">"Son: "</span>))
+    natija = <span class="num">100</span> <span class="op">/</span> son
+
+<span class="kw">except</span> <span class="cls">ValueError</span>:
+    <span class="fn">print</span>(<span class="str">"Son kiriting!"</span>)
+
+<span class="kw">except</span> <span class="cls">ZeroDivisionError</span>:
+    <span class="fn">print</span>(<span class="str">"Nolga bo'lish mumkin emas!"</span>)
+
+<span class="kw">except</span> <span class="cls">Exception</span> <span class="kw">as</span> e:
+    <span class="fn">print</span>(<span class="str">f"Xato: {e}"</span>)
+
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">f"Natija: {natija}"</span>)  <span class="cm"># xato bo'lmasa</span>
+
+<span class="kw">finally</span>:
+    <span class="fn">print</span>(<span class="str">"Har doim ishlaydi"</span>)  <span class="cm"># har doim</span></pre>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span>
+          Asosiy xatoliklar
+        </div>
+        <pre><span class="cls">TypeError</span>       <span class="cm"># noto'g'ri tur: "a" + 1</span>
+<span class="cls">ValueError</span>      <span class="cm"># noto'g'ri qiymat: int("abc")</span>
+<span class="cls">KeyError</span>        <span class="cm"># lug'atda yo'q kalit</span>
+<span class="cls">IndexError</span>      <span class="cm"># ro'yxat indeksi yo'q</span>
+<span class="cls">AttributeError</span>  <span class="cm"># atribut yo'q</span>
+<span class="cls">FileNotFoundError</span> <span class="cm"># fayl yo'q</span>
+<span class="cls">ImportError</span>     <span class="cm"># modul topilmadi</span>
+<span class="cls">ZeroDivisionError</span> <span class="cm"># nolga bo'lish</span>
+
+<span class="cm"># O'z xatoligingiz:</span>
+<span class="kw">class</span> <span class="cls">MeningXatom</span>(<span class="cls">Exception</span>):
+    <span class="kw">pass</span>
+
+<span class="kw">raise</span> <span class="cls">MeningXatom</span>(<span class="str">"Narsa noto'g'ri!"</span>)</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. VIRTUAL MUHIT -->
+  <section class="section" id="env">
+    <div class="section-header">
+      <span class="section-icon">🌐</span>
+      <span class="section-title">Virtual Muhit (venv)</span>
+      <span class="section-badge">08 / VIRTUAL ENV</span>
+    </div>
+
+    <div class="info-box">
+      <strong>Virtual muhit nima?</strong> — Har bir loyiha uchun alohida "quti". Bir loyihada <code>django==4.0</code>, boshqasida <code>django==3.0</code> bo'lsa — bir-biriga xalaqit bermaydi.
+    </div>
+
+    <div class="grid" style="margin-bottom: 20px;">
+      <div class="card">
+        <div class="card-header">
+          <span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span>
+          venv — standart Python usuli
+        </div>
+        <pre><span class="cm"># Yaratish</span>
+python3 -m venv myenv
+
+<span class="cm"># Faollashtirish</span>
+source myenv/bin/activate      <span class="cm"># Linux/Mac</span>
+myenv\Scripts\activate         <span class="cm"># Windows</span>
+
+<span class="cm"># Faollashtirish belgisi:</span>
+(myenv) user@host:~$
+
+<span class="cm"># Kutubxona o'rnatish</span>
+pip install fastapi
+pip install -r requirements.txt
+
+<span class="cm"># Ro'yxat saqlash</span>
+pip freeze > requirements.txt
+
+<span class="cm"># O'chirish</span>
+deactivate</pre>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span>
+          conda — Anaconda usuli (sizda bor)
+        </div>
+        <pre><span class="cm"># Muhit yaratish</span>
+conda create -n myproject python=3.11
+
+<span class="cm"># Faollashtirish</span>
+conda activate myproject
+
+<span class="cm"># O'rnatish</span>
+conda install numpy pandas
+pip install fastapi     <span class="cm"># pip ham ishlaydi</span>
+
+<span class="cm"># Barcha muhitlar ro'yxati</span>
+conda env list
+
+<span class="cm"># Muhit eksport</span>
+conda env export > environment.yml
+
+<span class="cm"># Yuklab olish</span>
+conda env create -f environment.yml
+
+<span class="cm"># O'chirish</span>
+conda deactivate
+conda remove -n myproject --all</pre>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom: 20px;">
+      <div class="card-header">
+        <span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span>
+        📁 venv tuzilmasi — ichida nima bor?
+      </div>
+      <div class="env-diagram">
+<span class="env-folder">myenv/</span>                             <span class="env-desc">← virtual muhit papkasi</span>
+<span class="env-arrow">│</span>
+<span class="env-arrow">├─</span> <span class="env-folder">bin/</span> (Linux) / <span class="env-folder">Scripts/</span> (Windows)   <span class="env-desc">← activate, python, pip shu yerda</span>
+<span class="env-arrow">│   ├─</span> <span class="env-file">activate</span>                         <span class="env-desc">← "source activate" shu fayl</span>
+<span class="env-arrow">│   ├─</span> <span class="env-file">python3</span>                          <span class="env-desc">← bu muhitning Python si</span>
+<span class="env-arrow">│   └─</span> <span class="env-file">pip</span>                              <span class="env-desc">← bu muhitning pip i</span>
+<span class="env-arrow">│</span>
+<span class="env-arrow">├─</span> <span class="env-folder">lib/</span>
+<span class="env-arrow">│   └─</span> <span class="env-folder">python3.11/site-packages/</span>        <span class="env-desc">← o'rnatilgan kutubxonalar shu yerda</span>
+<span class="env-arrow">│       ├─</span> <span class="env-folder">fastapi/</span>
+<span class="env-arrow">│       ├─</span> <span class="env-folder">numpy/</span>
+<span class="env-arrow">│       └─</span> <span class="env-folder">...</span>
+<span class="env-arrow">│</span>
+<span class="env-arrow">└─</span> <span class="env-folder">include/</span>                             <span class="env-desc">← C kengaytmalar uchun header fayllar</span>
+      </div>
+    </div>
+
+    <div class="info-box green">
+      <strong>Qoida:</strong> Har bir yangi loyiha = yangi virtual muhit. <code>myenv/</code> papkasini git ga qo'shma — faqat <code>requirements.txt</code> ni qo'sh!
+    </div>
+  </section>
+
+  <!-- 9. CONDA -->
+  <section class="section" id="conda">
+    <div class="section-header">
+      <span class="section-icon">🐍</span>
+      <span class="section-title">Conda — ML/AI uchun muhitlar</span>
+      <span class="section-badge">09 / CONDA</span>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-title">ML uchun muhit yaratish</div>
+          <pre style="border-radius: 8px; margin-top: 8px">conda create -n ml python=3.11
+conda activate ml
+pip install numpy pandas scikit-learn matplotlib jupyter</pre>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-title">LLM uchun muhit</div>
+          <pre style="border-radius: 8px; margin-top: 8px">conda create -n llm python=3.11
+conda activate llm
+pip install openai langchain transformers torch</pre>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-title">Backend (FastAPI) uchun muhit</div>
+          <pre style="border-radius: 8px; margin-top: 8px">conda create -n backend python=3.11
+conda activate backend
+pip install fastapi uvicorn sqlalchemy psycopg2 aiogram</pre>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <div class="step-title">Cyber uchun muhit</div>
+          <pre style="border-radius: 8px; margin-top: 8px">conda create -n cyber python=3.11
+conda activate cyber
+pip install scapy requests cryptography pwntools</pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. UMUMIY RASM -->
+  <section class="section" id="image">
+    <div class="section-header">
+      <span class="section-icon">🗺️</span>
+      <span class="section-title">Python — Umumiy Ko'rinish</span>
+      <span class="section-badge">10 / BIG PICTURE</span>
+    </div>
+
+    <div style="background: var(--code-bg); border: 1px solid var(--border); border-radius: 16px; padding: 32px; overflow-x: auto;">
+      <svg viewBox="0 0 900 520" style="width:100%; max-width:900px; display:block; margin:0 auto; font-family:'JetBrains Mono',monospace;">
+        <!-- Background grid -->
+        <defs>
+          <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e3a5f" stroke-width="0.5" opacity="0.3"/>
+          </pattern>
+          <linearGradient id="py-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.8"/>
+            <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:0.8"/>
+          </linearGradient>
+          <linearGradient id="ml-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:0.8"/>
+            <stop offset="100%" style="stop-color:#a78bfa;stop-opacity:0.8"/>
+          </linearGradient>
+          <linearGradient id="web-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.8"/>
+            <stop offset="100%" style="stop-color:#34d399;stop-opacity:0.8"/>
+          </linearGradient>
+          <linearGradient id="cyber-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#f87171;stop-opacity:0.8"/>
+            <stop offset="100%" style="stop-color:#fb923c;stop-opacity:0.8"/>
+          </linearGradient>
+          <linearGradient id="data-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:0.8"/>
+            <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:0.8"/>
+          </linearGradient>
+        </defs>
+        <rect width="900" height="520" fill="url(#grid)"/>
+
+        <!-- CENTER: Python Core -->
+        <circle cx="450" cy="260" r="72" fill="#0a0e17" stroke="#3b82f6" stroke-width="2"/>
+        <circle cx="450" cy="260" r="68" fill="url(#py-grad)" opacity="0.15"/>
+        <text x="450" y="250" text-anchor="middle" fill="#3b82f6" font-size="28">🐍</text>
+        <text x="450" y="275" text-anchor="middle" fill="#e2e8f0" font-size="15" font-weight="bold">Python</text>
+        <text x="450" y="293" text-anchor="middle" fill="#64748b" font-size="10">3.11+</text>
+
+        <!-- CONNECTION LINES -->
+        <line x1="450" y1="188" x2="450" y2="130" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.5"/>
+        <line x1="390" y1="215" x2="270" y2="150" stroke="#8b5cf6" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.5"/>
+        <line x1="390" y1="300" x2="260" y2="380" stroke="#10b981" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.5"/>
+        <line x1="450" y1="332" x2="450" y2="395" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.5"/>
+        <line x1="510" y1="300" x2="640" y2="380" stroke="#f87171" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.5"/>
+        <line x1="510" y1="215" x2="640" y2="145" stroke="#22d3ee" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.5"/>
+
+        <!-- TOP: ML/AI -->
+        <rect x="370" y="40" width="160" height="82" rx="12" fill="#0a0e17" stroke="#8b5cf6" stroke-width="1.5"/>
+        <rect x="370" y="40" width="160" height="82" rx="12" fill="url(#ml-grad)" opacity="0.08"/>
+        <text x="450" y="70" text-anchor="middle" fill="#a78bfa" font-size="20">🤖</text>
+        <text x="450" y="90" text-anchor="middle" fill="#e2e8f0" font-size="12" font-weight="bold">ML / AI</text>
+        <text x="450" y="107" text-anchor="middle" fill="#64748b" font-size="9">scikit-learn · torch · transformers</text>
+
+        <!-- TOP-LEFT: Backend -->
+        <rect x="130" y="90" width="145" height="82" rx="12" fill="#0a0e17" stroke="#22d3ee" stroke-width="1.5"/>
+        <rect x="130" y="90" width="145" height="82" rx="12" fill="#22d3ee" opacity="0.05"/>
+        <text x="202" y="120" text-anchor="middle" fill="#22d3ee" font-size="20">⚡</text>
+        <text x="202" y="140" text-anchor="middle" fill="#e2e8f0" font-size="12" font-weight="bold">Backend</text>
+        <text x="202" y="157" text-anchor="middle" fill="#64748b" font-size="9">FastAPI · Django · Flask</text>
+
+        <!-- BOTTOM-LEFT: Web/Scraping -->
+        <rect x="120" y="330" width="155" height="82" rx="12" fill="#0a0e17" stroke="#10b981" stroke-width="1.5"/>
+        <rect x="120" y="330" width="155" height="82" rx="12" fill="url(#web-grad)" opacity="0.05"/>
+        <text x="197" y="360" text-anchor="middle" fill="#10b981" font-size="20">🕸️</text>
+        <text x="197" y="380" text-anchor="middle" fill="#e2e8f0" font-size="12" font-weight="bold">Scraping/Bot</text>
+        <text x="197" y="397" text-anchor="middle" fill="#64748b" font-size="9">aiogram · selenium · BS4</text>
+
+        <!-- BOTTOM: Data/SQL -->
+        <rect x="365" y="400" width="170" height="82" rx="12" fill="#0a0e17" stroke="#fbbf24" stroke-width="1.5"/>
+        <rect x="365" y="400" width="170" height="82" rx="12" fill="url(#data-grad)" opacity="0.05"/>
+        <text x="450" y="430" text-anchor="middle" fill="#fbbf24" font-size="20">📊</text>
+        <text x="450" y="450" text-anchor="middle" fill="#e2e8f0" font-size="12" font-weight="bold">Data / SQL</text>
+        <text x="450" y="467" text-anchor="middle" fill="#64748b" font-size="9">pandas · SQLAlchemy · psycopg2</text>
+
+        <!-- BOTTOM-RIGHT: Cyber -->
+        <rect x="625" y="330" width="155" height="82" rx="12" fill="#0a0e17" stroke="#f87171" stroke-width="1.5"/>
+        <rect x="625" y="330" width="155" height="82" rx="12" fill="url(#cyber-grad)" opacity="0.05"/>
+        <text x="702" y="360" text-anchor="middle" fill="#f87171" font-size="20">🔐</text>
+        <text x="702" y="380" text-anchor="middle" fill="#e2e8f0" font-size="12" font-weight="bold">Cyber</text>
+        <text x="702" y="397" text-anchor="middle" fill="#64748b" font-size="9">scapy · cryptography · pwntools</text>
+
+        <!-- TOP-RIGHT: LLM -->
+        <rect x="625" y="90" width="155" height="82" rx="12" fill="#0a0e17" stroke="#22d3ee" stroke-width="1.5"/>
+        <rect x="625" y="90" width="155" height="82" rx="12" fill="#22d3ee" opacity="0.05"/>
+        <text x="702" y="120" text-anchor="middle" fill="#22d3ee" font-size="20">🧠</text>
+        <text x="702" y="140" text-anchor="middle" fill="#e2e8f0" font-size="12" font-weight="bold">LLM / NLP</text>
+        <text x="702" y="157" text-anchor="middle" fill="#64748b" font-size="9">langchain · openai · huggingface</text>
+
+        <!-- BOTTOM TEXT -->
+        <text x="450" y="508" text-anchor="middle" fill="#1e3a5f" font-size="11">Python ecosystem</text>
+      </svg>
+    </div>
+
+    <div class="grid grid-3" style="margin-top: 20px;">
+      <div class="info-box green">
+        <strong>Siz hozirgacha:</strong> FastAPI (backend), aiogram (bot), SQL — hammasi Python! ✅
+      </div>
+      <div class="info-box yellow">
+        <strong>Keyingi qadamlar:</strong> Classlarni chuqur tushunish → OOP pattern → ML boshlash
+      </div>
+      <div class="info-box">
+        <strong>Muhit qoidasi:</strong> Har loyiha = alohida conda env. (base) da ishlamang!
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<div class="footer">
+  🐍 Python Cheatsheet · <span>Jasur uchun</span> · TSUE × School 21 · 2026
+</div>
+
+</body>
+</html>
